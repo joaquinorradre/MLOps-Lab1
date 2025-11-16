@@ -5,6 +5,7 @@ API for image processing and prediction using FastAPI.
 """
 
 import io
+from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request, File, UploadFile, Form
 from fastapi.templating import Jinja2Templates
@@ -17,7 +18,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
-templates = Jinja2Templates(directory="templates")
+BASE_DIR = Path(__file__).resolve().parent
+TEMPLATES_DIR = BASE_DIR.parent / "templates"
+
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 
 @app.get("/", response_class=HTMLResponse)
