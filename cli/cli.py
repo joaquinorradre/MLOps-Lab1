@@ -23,7 +23,7 @@ def predict(image_path):
 
     with open(image_path, "rb") as f:
         image_bytes = f.read()
-    
+
     prediction = logic.predict(image_bytes)
     print(f"Prediction: {prediction}")
 
@@ -41,12 +41,12 @@ def resize(image_path, width, height, output_path):
 
     with open(image_path, "rb") as f:
         image_bytes = f.read()
-        
+
     resized_bytes = logic.resize(image_bytes, width, height)
-    
+
     with open(output_path, "wb") as f:
         f.write(resized_bytes)
     print(f"Image resized and saved to: {output_path}")
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     cli()
