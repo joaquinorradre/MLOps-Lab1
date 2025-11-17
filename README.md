@@ -105,7 +105,7 @@ You can now access:
     }
     ```
 
-3. **POST /resize**
+2. **POST /resize**
    <img width="1080" height="906" alt="image" src="https://github.com/user-attachments/assets/8ba332eb-c97c-467e-97e8-eba7f5840c78" />
 
 
@@ -115,6 +115,15 @@ You can now access:
     - Width: The target width (int form data).
     - Height: The target height (int form data).
     - Output: The resized image file (image/png).
+
+3. **POST /resize**
+    <img width="1344" height="898" alt="image" src="https://github.com/user-attachments/assets/c090764a-e844-46a9-b4b3-bdf7b466ce40" />
+
+
+    - Takes an image file and returns a grayscale version of it.
+    - Input: multipart/form-data
+    - File: The image file (UploadFile).
+    - Output: The processed grayscale image file (image/png
 
 ### Running the CLI
 
