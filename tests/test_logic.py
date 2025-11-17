@@ -43,3 +43,16 @@ def test_resize():
         20,
     ), "Image was not resized to the correct dimensions."
     assert resized_img.format == "PNG", "Resized image is not in PNG format."
+
+def test_convert_to_grayscale():
+    """Test the convert_to_grayscale function."""
+    img_color = Image.new('RGB', (50, 50), color = 'red')
+    byte_io = io.BytesIO()
+    img_color.save(byte_io, format='PNG')
+    image_bytes = byte_io.getvalue()
+
+    gray_bytes = logic.convert_to_grayscale(image_bytes)
+
+    gray_img = Image.open(io.BytesIO(gray_bytes))
+    assert gray_img.mode == 'L', "Image was not converted to grayscale (mode 'L')."
+    assert gray_img.size == (50, 50), "Grayscale image has incorrect dimensions."

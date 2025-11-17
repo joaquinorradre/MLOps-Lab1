@@ -71,6 +71,23 @@ async def resize_endpoint(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error resizing image: {e}") from e
 
+@app.post("/grayscale")
+async def grayscale_endpoint(file: UploadFile = File(...)):
+    """
+    Endpoint to convert an image to grayscale.
+    Receives an image file and returns the processed image.
+    """
+    try:
+        image_bytes = await file.read()
+
+        grayscale_bytes = logic.convert_to_grayscale(image_bytes)
+
+        return StreamingResponse(io.BytesIO(grayscale_bytes), media_type="image/png")
+
+    except Exception as e:
+        raise HTTPException(status_code=500,
+                            detail=f"Error converting image to grayscale: {e}") from e
+
 
 if __name__ == "__main__":
     uvicorn.run("api.api:app", host="0.0.0.0", port=8000, reload=True) # pragma: no cover

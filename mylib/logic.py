@@ -6,7 +6,7 @@ Logic for image processing and prediction.
 
 import random
 import io
-from PIL import Image
+from PIL import Image, ImageOps
 
 
 def predict(_image_bytes: bytes) -> str:
@@ -26,6 +26,20 @@ def resize(image_bytes: bytes, width: int, height: int) -> bytes:
 
     byte_io = io.BytesIO()
     img_resized.save(byte_io, format="PNG")
+    byte_io.seek(0)
+
+    return byte_io.getvalue()
+
+def convert_to_grayscale(image_bytes: bytes) -> bytes:
+    """
+    Convert an image to grayscale.
+    """
+    img = Image.open(io.BytesIO(image_bytes))
+
+    img_gray = ImageOps.grayscale(img)
+
+    byte_io = io.BytesIO()
+    img_gray.save(byte_io, format="PNG")
     byte_io.seek(0)
 
     return byte_io.getvalue()

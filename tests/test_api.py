@@ -93,6 +93,32 @@ def test_resize_missing_data(client):
 
     assert response.status_code == 422
 
+def test_grayscale_endpoint(client):
+    """
+    Verify that the /grayscale endpoint correctly converts an image
+    and returns the new image.
+    """
+    img_bytes = create_fake_image_bytes()
+
+    response = client.post(
+        "/grayscale",
+        files={"file": ("test_image.png", img_bytes, "image/png")}
+    )
+
+    assert response.status_code == 200
+    assert response.headers['content-type'] == 'image/png'
+
+    gray_img = Image.open(io.BytesIO(response.content))
+    assert gray_img.mode == 'L'
+
+def test_grayscale_missing_file(client):
+    """
+    Verify that the /grayscale endpoint returns a 422 error
+    if no file is provided.
+    """
+    response = client.post("/grayscale")
+    assert response.status_code == 422
+
 def test_predict_handles_exception(client, monkeypatch):
     """
     Verify that the /predict endpoint returns a 500 error
@@ -150,3 +176,22 @@ def test_resize_handles_general_exception(client, monkeypatch):
 
     assert response.status_code == 500
     assert "Error resizing image" in response.json()["detail"]
+
+def test_grayscale_handles_exception(client, monkeypatch):
+    """
+    Verify that the /grayscale endpoint returns a 500 error
+    if the logic.convert_to_grayscale function fails.
+    """
+    def mock_grayscale(_image_bytes):
+        raise RuntimeError("Simulated Grayscale Error")
+
+    monkeypatch.setattr("api.api.logic.convert_to_grayscale", mock_grayscale)
+
+    img_bytes = create_fake_image_bytes()
+    response = client.post(
+        "/grayscale",
+        files={"file": ("test_image.png", img_bytes, "image/png")}
+    )
+
+    assert response.status_code == 500
+    assert "Error converting image to grayscale" in response.json()["detail"]

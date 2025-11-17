@@ -58,6 +58,30 @@ def test_resize_command(tmp_path):
     with Image.open(output_image_path) as resized_img:
         assert resized_img.size == (target_width, target_height)
 
+def test_grayscale_command(tmp_path):
+    """
+    Test the 'grayscale' command.
+    """
+    fake_image_path = tmp_path / "input_color.jpg"
+    img = Image.new('RGB', (200, 200), color='blue')
+    img.save(fake_image_path)
+
+    output_image_path = tmp_path / "output_gray.png"
+
+    runner = CliRunner()
+    result = runner.invoke(cli, [
+        'grayscale',
+        str(fake_image_path),
+        str(output_image_path)
+    ])
+
+    assert result.exit_code == 0
+    assert "Grayscale image saved to:" in result.output
+    assert output_image_path.exists()
+
+    with Image.open(output_image_path) as gray_img:
+        assert gray_img.mode == 'L'
+
 def test_cli_help():
     """Test that the main --help command works."""
     runner = CliRunner()
@@ -67,3 +91,4 @@ def test_cli_help():
     assert "Usage: cli [OPTIONS] COMMAND [ARGS]..." in result.output
     assert "predict" in result.output
     assert "resize" in result.output
+    assert "grayscale" in result.output

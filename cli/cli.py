@@ -48,5 +48,24 @@ def resize(image_path, width, height, output_path):
         f.write(resized_bytes)
     print(f"Image resized and saved to: {output_path}")
 
+@cli.command("grayscale")
+@click.argument('image_path', type=click.Path(exists=True))
+@click.argument('output_path', type=click.Path())
+def grayscale(image_path, output_path):
+    """Convert an image to grayscale and save it.
+
+    Example:
+        uv run python -m cli.cli grayscale input.jpg output_gray.png
+    """
+
+    with open(image_path, "rb") as f:
+        image_bytes = f.read()
+
+    grayscale_bytes = logic.convert_to_grayscale(image_bytes)
+
+    with open(output_path, "wb") as f:
+        f.write(grayscale_bytes)
+    print(f"Grayscale image saved to: {output_path}")
+
 if __name__ == "__main__": # pragma: no cover
     cli()
