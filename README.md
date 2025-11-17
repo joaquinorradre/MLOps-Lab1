@@ -39,11 +39,11 @@ This project uses uv for package management.
     ```bash
        git clone https://github.com/joaquinorradre/MLOps-Lab1.git
        cd MLOps
-       ```
+    ```
 2. **Install dependencies**
 
     ```bash
-       make install
+        make install
     ```
 3. **Activate the new environment**
 
@@ -53,7 +53,7 @@ This project uses uv for package management.
      ```
     On macOS/Linux (Bash)
     ```bash
-    source .venv/bin/activate
+    source .venv/Scripts/activate
     ```
 
 ## Usage
